@@ -1,0 +1,47 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: example-worker-cloudsqlproxy
+spec:
+  schedule: "0 7 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: example-worker-cloudsqlproxy
+        spec:
+          shareProcessNamespace: true
+          containers:
+            - name: app-worker
+              image: <image>
+              resources:
+                requests:
+                  cpu: "10m"
+              securityContext:
+                capabilities:
+                  add:
+                  - SYS_PTRACE
+              stdin: true
+              tty: true
+            - name: cloudsql-proxy
+              image: gcr.io/cloudsql-docker/gce-proxy:1.14
+              resources:
+                requests:
+                  cpu: "10m"
+              command: ["/cloud_sql_proxy"]
+              args: ["-verbose=true", "-term_timeout=30s", "-instances=<db_instance>","-credential_file=<crendential_file>"]
+              securityContext:
+                runAsUser: 2
+                allowPrivilegeEscalation: false
+              volumeMounts:
+                - name: cloudsql-instance-credentials
+                  mountPath: /secrets
+                  readOnly: true
+          restartPolicy: Never
+          volumes:
+            - name: cloudsql-instance-credentials
+              secret:
+                secretName: cloudsql-instance-credentials
+
