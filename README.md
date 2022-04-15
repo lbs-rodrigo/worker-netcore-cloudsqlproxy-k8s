@@ -16,7 +16,9 @@ O exemplo considera que você tenha familiaridade com .NET, Docker, Kubernets e 
 
 O Worker irá aguardar 2 minutos exemplificando a execução de uma regra de negocio, apos os 2 minutos irá iniciar a finalização do container cloud_sql_proxy e por fim finalizar o seu proprio processo.
 
-## Executando o exemplo
+### Executando o exemplo
+
+Caso tenha interesse em executar localmente importe as referencias utilizando using nos arquivos Program.cs e Worker.cs
 
 Para executar configure os valores que estão entre <> no arquivo k8s-worker-spec.yaml para corresponder ao seu ambiente.
 
