@@ -15,7 +15,7 @@ spec:
           shareProcessNamespace: true
           containers:
             - name: app-worker
-              image: <image>
+              image: <name_image>
               resources:
                 requests:
                   cpu: "10m"
@@ -26,7 +26,7 @@ spec:
               stdin: true
               tty: true
             - name: cloudsql-proxy
-              image: gcr.io/cloudsql-docker/gce-proxy:1.14
+              image: gcr.io/cloudsql-docker/gce-proxy:latest
               resources:
                 requests:
                   cpu: "10m"
